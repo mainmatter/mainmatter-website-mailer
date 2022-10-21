@@ -28,7 +28,15 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     // Optionally, get more helpful error messages written to the console in the case of a panic.
     utils::set_panic_hook();
 
-    Router::new()
+    let cors = Cors::new()
+        .with_origins(vec!["*"])
+        .with_allowed_headers(vec!["Content-Type", ""])
+        .with_methods([Method::Post]);
+
+    let response = Router::new()
+        .options_async("/send", |_req, _ctx| async move {
+            Response::ok("")
+        })
         .post_async("/send", |mut req, ctx| async move {
             let api_key = ctx.secret("SENDGRID_API_KEY")?.to_string();
 
@@ -72,5 +80,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             }
         })
         .run(req, env)
-        .await
+        .await?;
+
+    response.with_cors(&cors)
 }
