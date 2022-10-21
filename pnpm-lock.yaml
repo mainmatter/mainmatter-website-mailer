@@ -1,9 +1,11 @@
 lockfileVersion: 5.4
 
 specifiers:
+  prettier: ^2.7.1
   wrangler: ^2.0.0
 
 devDependencies:
+  prettier: 2.7.1
   wrangler: 2.1.13
 
 packages:
@@ -745,6 +747,12 @@ packages:
   /picomatch/2.3.1:
     resolution: {integrity: sha512-JU3teHTNjmE2VCGFzuY8EXzCDVwEqB2a8fsIvwaStHhAWJEeVd1o1QD80CU6+ZdEXXSLbSsuLwJjkCBWqRQUVA==}
     engines: {node: '>=8.6'}
+    dev: true
+
+  /prettier/2.7.1:
+    resolution: {integrity: sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
     dev: true
 
   /readdirp/3.6.0:
