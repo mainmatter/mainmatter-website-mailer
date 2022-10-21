@@ -48,12 +48,12 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                     let data = json!({
                         "personalizations": [{
                             "to": [
-                                { "email": "marco.otte-witte@mainmatter.com" }
+                                { "email": "contact@mainmatter.com", "name": "Mainmatter" }
                             ]}
                         ],
-                        "from": { "email": "no-reply@mainmatter.com", "name": "Mainmatter Website" },
+                        "from": { "email": "no-reply@mainmatter.com", "name": format!("{} via mainmatter.com", payload.name) },
                         "reply_to": { "email": payload.email, "name": payload.name },
-                        "subject": format!("{} via mainmatter.com", payload.name),
+                        "subject": "Mainmatter inquiry",
                         "content": [{
                             "type": "text/plain",
                             "value": message
