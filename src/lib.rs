@@ -33,7 +33,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
         .post_async("/send", |mut req, ctx| async move {
             let api_key = ctx.secret("SENDGRID_API_KEY")?.to_string();
 
-            return match req.json::<Payload>().await {
+            match req.json::<Payload>().await {
                 Ok(payload) => {
                     let data = json!({
                         "personalizations": [{
@@ -70,7 +70,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 
                 },
                 Err(_) => Response::error("Unprocessable Entity", 422)
-            };
+            }
         })
         .run(req, env)
         .await
