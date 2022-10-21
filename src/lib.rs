@@ -46,7 +46,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         "subject": format!("{} via mainmatter.com", payload.name),
                         "content": [{
                             "type": "text/plain",
-                            "value": "and easy to do anywhere, even with cURL"
+                            "value": payload.message
                         }]
                     });
 
