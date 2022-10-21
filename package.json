@@ -2,7 +2,7 @@
 	"private": true,
 	"version": "0.0.0",
 	"scripts": {
-		"deploy": "wrangler publish",
+		"release": "wrangler publish",
 		"dev": "wrangler dev --local",
 		"lint:md": "prettier --check '**/*md'",
 		"lint": "npm-run-all --print-name --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",

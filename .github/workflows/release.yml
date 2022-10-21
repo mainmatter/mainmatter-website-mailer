@@ -1,0 +1,33 @@
+name: Release
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+jobs:
+  lint:
+    name: Release
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: volta-cli/action@v4
+      - uses: pnpm/action-setup@v2.2.4
+        with:
+          version: 7.13.6
+
+      - name: rust-toolchain
+        uses: actions-rs/toolchain@v1.0.3
+        with:
+          toolchain: stable
+
+      - name: install dependencies
+        run: pnpm install
+
+      - name: release
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: pnpm run release
