@@ -42,6 +42,9 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
 
             match req.json::<Payload>().await {
                 Ok(payload) => {
+                    let message = payload.message.trim();
+                    let message = if !message.is_empty() { message } else { "–" };
+
                     let data = json!({
                         "personalizations": [{
                             "to": [
@@ -53,7 +56,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
                         "subject": format!("{} via mainmatter.com", payload.name),
                         "content": [{
                             "type": "text/plain",
-                            "value": payload.message
+                            "value": message
                         }]
                     });
 
