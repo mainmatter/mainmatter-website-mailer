@@ -1,41 +1,22 @@
-# Template: worker-rust
+# Mainmatter Website Mailer
 
-A template for kick starting a Cloudflare worker project using [`workers-rs`](https://github.com/cloudflare/workers-rs).
-
-This template is designed for compiling Rust to WebAssembly and publishing the resulting worker to Cloudflare's [edge infrastructure](https://www.cloudflare.com/network/).
-
-## Setup
-
-To create a `my-project` directory using this template, run:
-
-```sh
-$ npm init cloudflare my-project worker-rust
-# or
-$ yarn create cloudflare my-project worker-rust
-# or
-$ pnpm create cloudflare my-project worker-rust
-```
-
-> **Note:** Each command invokes [`create-cloudflare`](https://www.npmjs.com/package/create-cloudflare) for project creation.
+This is a simple email sending service used to deliver mails sent via the [contact form on mainmatter.com](http://mainmatter.com/contact/). It's written in Rust using [`workers-rs`](https://github.com/cloudflare/workers-rs) and runs as a worker on [Cloudflare's edge infrastructure](https://www.cloudflare.com/network/).
 
 ## Usage
 
-This template starts you off with a `src/lib.rs` file, acting as an entrypoint for requests hitting your Worker. Feel free to add more code in this file, or create Rust modules anywhere else for this project to use.
+The project is based on the [template for worker-rs](https://github.com/cloudflare/rustwasm-worker-template). The main code is in the `src/lib.rs` file.
 
-With `wrangler`, you can build, test, and deploy your Worker with the following commands:
+The [`wrangler` package](https://github.com/cloudflare/wrangler2) is used to run the worker locally:
 
-```sh
-# compiles your project to WebAssembly and will warn of any issues
-$ npm run build
-
-# run your Worker in an ideal development workflow (with a local server, file watcher & more)
-$ npm run dev
-
-# deploy your Worker globally to the Cloudflare network (update your wrangler.toml file for configuration)
-$ npm run deploy
+```bash
+$ pnpm run dev
 ```
 
-Read the latest `worker` crate documentation here: https://docs.rs/worker
+as well as to deploy a new version:
+
+```bash
+$ pnpm run deploy
+```
 
 ## WebAssembly
 
@@ -43,6 +24,8 @@ Read the latest `worker` crate documentation here: https://docs.rs/worker
 
 Read more about this on the [`workers-rs`](https://github.com/cloudflare/workers-rs) project README.
 
-## Issues
+## Copyright
 
-If you have any problems with the `worker` crate, please open an issue on the upstream project issue tracker on the [`workers-rs` repository](https://github.com/cloudflare/workers-rs).
+Copyright &copy; 2019-2022 Mainmatter GmbH (https://mainmatter.com), released
+under the
+[Creative Commons Attribution-NonCommercial 4.0 International license](https://creativecommons.org/licenses/by-nc/4.0/).
