@@ -1,7 +1,6 @@
 use reqwest;
 use serde::Deserialize;
 use serde_json::json;
-use std::env;
 use worker::*;
 
 mod utils;
