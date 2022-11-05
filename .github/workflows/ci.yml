@@ -78,3 +78,22 @@ jobs:
       uses: actions-rs/cargo@v1.0.1
       with:
         command: clippy
+
+  test:
+    name: "Test"
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: rust-toolchain
+      uses: actions-rs/toolchain@v1.0.3
+      with:
+        toolchain: stable
+        components: clippy
+
+    - name: install wasm-pack
+      run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+
+    - name: test
+      run: wasm-pack test --headless --chrome
