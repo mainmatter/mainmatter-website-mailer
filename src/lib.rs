@@ -15,10 +15,10 @@ fn log_request(req: &Request) {
 }
 
 #[derive(Deserialize)]
-struct Payload {
-    name: String,
-    email: String,
-    message: String,
+pub struct Payload {
+    pub name: String,
+    pub email: String,
+    pub message: String,
 }
 
 #[event(fetch, respond_with_errors)]
