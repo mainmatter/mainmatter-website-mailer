@@ -1,6 +1,11 @@
+use reqwest::Client;
 use serde::Deserialize;
 use serde_json::json;
-use worker::*;
+use std::future::Future;
+use std::result::Result;
+use worker::{
+    console_log, event, Cors, Date, Env, Method, Request, Response, Result as WorkerResult, Router,
+};
 
 mod utils;
 
@@ -22,7 +27,7 @@ pub struct Payload {
 }
 
 #[event(fetch, respond_with_errors)]
-pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Response> {
+pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> WorkerResult<Response> {
     log_request(&req);
 
     // Optionally, get more helpful error messages written to the console in the case of a panic.
@@ -39,7 +44,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
             let api_key = ctx.secret("SENDGRID_API_KEY")?.to_string();
 
             match req.json::<Payload>().await {
-                Ok(payload) => send_message(payload, &api_key).await,
+                Ok(payload) => send_message(payload, &api_key, &request_sendgrid).await,
                 Err(_) => Response::error("Unprocessable Entity", 422),
             }
         })
@@ -49,7 +54,14 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> Result<Respo
     response.with_cors(&cors)
 }
 
-pub async fn send_message(payload: Payload, api_key: &str) -> Result<Response> {
+pub async fn send_message<'a, Fut>(
+    payload: Payload,
+    api_key: &'a str,
+    sendgrid: impl FnOnce(&'a str, String) -> Fut + 'a,
+) -> WorkerResult<Response>
+where
+    Fut: Future<Output = Result<u16, NetworkError>>,
+{
     let message = payload.message.trim();
     let message = if !message.is_empty() { message } else { "–" };
 
@@ -68,20 +80,31 @@ pub async fn send_message(payload: Payload, api_key: &str) -> Result<Response> {
         }]
     });
 
-    let client = reqwest::Client::new();
+    let result = sendgrid(api_key, data.to_string()).await;
+
+    match result {
+        Ok(status) => match status {
+            202 => Response::ok(""),
+            _ => Response::error("Bad Gateway", 502),
+        },
+        Err(_) => Response::error("Internal Server Error", 500),
+    }
+}
+
+pub struct NetworkError;
+
+async fn request_sendgrid(api_key: &str, data: String) -> Result<u16, NetworkError> {
+    let client = Client::new();
     let result = client
         .post("https://api.sendgrid.com/v3/mail/send")
         .header("Authorization", format!("Bearer {}", api_key))
         .header("Content-Type", "application/json")
-        .body(data.to_string())
+        .body(data)
         .send()
         .await;
 
     match result {
-        Ok(response) => match response.status() {
-            reqwest::StatusCode::ACCEPTED => Response::ok(""),
-            _ => Response::error("Bad Gateway", 502),
-        },
-        Err(_) => Response::error("Internal Server Error", 500),
+        Ok(response) => Ok(response.status().as_u16()),
+        Err(_) => Err(NetworkError),
     }
 }
