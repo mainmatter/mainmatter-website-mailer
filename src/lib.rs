@@ -4,7 +4,8 @@ use serde_json::json;
 use std::future::Future;
 use std::result::Result;
 use worker::{
-    console_log, event, Cors, Date, Env, Method, Request, Response, Result as WorkerResult, Router,
+    console_log, event, Cors, Date, Env, FormEntry, Method, Request, Response,
+    Result as WorkerResult, Router,
 };
 
 mod utils;
@@ -42,10 +43,32 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> WorkerResult
         .options_async("/send", |_req, _ctx| async move { Response::ok("") })
         .post_async("/send", |mut req, ctx| async move {
             let api_key = ctx.secret("SENDGRID_API_KEY")?.to_string();
+            let mut req_clone = req.clone()?;
 
-            match req.json::<Payload>().await {
-                Ok(payload) => send_message(payload, &api_key, &request_sendgrid).await,
-                Err(_) => Response::error("Unprocessable Entity", 422),
+            if let Ok(payload) = req.json::<Payload>().await {
+                send_message(payload, &api_key, &request_sendgrid).await
+            } else if let Ok(form_data) = req_clone.form_data().await {
+                match (
+                    form_data.get("name"),
+                    form_data.get("email"),
+                    form_data.get("message"),
+                ) {
+                    (
+                        Some(FormEntry::Field(name)),
+                        Some(FormEntry::Field(email)),
+                        Some(FormEntry::Field(message)),
+                    ) => {
+                        let payload = Payload {
+                            name,
+                            email,
+                            message,
+                        };
+                        send_message(payload, &api_key, &request_sendgrid).await
+                    }
+                    _ => Response::error("Unprocessable Entity", 422),
+                }
+            } else {
+                Response::error("Unprocessable Entity", 422)
             }
         })
         .run(req, env)
