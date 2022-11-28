@@ -4,8 +4,8 @@ use serde_json::json;
 use std::future::Future;
 use std::result::Result;
 use worker::{
-    console_log, event, Cors, Date, Env, FormEntry, Method, Request, Response,
-    Result as WorkerResult, Router,
+    console_log, event, Cors, Date, Env, Error as WorkerError, FormEntry, Method, Request,
+    Response, Result as WorkerResult, Router, Url,
 };
 
 mod utils;
@@ -46,7 +46,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> WorkerResult
             let mut req_clone = req.clone()?;
 
             if let Ok(payload) = req.json::<Payload>().await {
-                send_message(payload, &api_key, &request_sendgrid).await
+                send_message(payload, &api_key, &request_sendgrid, Response::ok("")).await
             } else if let Ok(form_data) = req_clone.form_data().await {
                 match (
                     form_data.get("name"),
@@ -63,7 +63,19 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> WorkerResult
                             email,
                             message,
                         };
-                        send_message(payload, &api_key, &request_sendgrid).await
+                        if let Ok(Some(referrer)) = req.headers().get("referer") {
+                            let mut url = Url::parse(referrer.as_str())?;
+                            url.query_pairs_mut().append_pair("sent", "");
+                            send_message(
+                                payload,
+                                &api_key,
+                                &request_sendgrid,
+                                Response::redirect(url),
+                            )
+                            .await
+                        } else {
+                            Response::error("Unprocessable Entity", 422)
+                        }
                     }
                     _ => Response::error("Unprocessable Entity", 422),
                 }
@@ -81,6 +93,7 @@ pub async fn send_message<'a, Fut>(
     payload: Payload,
     api_key: &'a str,
     sendgrid: impl FnOnce(&'a str, String) -> Fut + 'a,
+    success_response: Result<Response, WorkerError>,
 ) -> WorkerResult<Response>
 where
     Fut: Future<Output = Result<u16, NetworkError>>,
@@ -107,7 +120,7 @@ where
 
     match result {
         Ok(status) => match status {
-            202 => Response::ok(""),
+            202 => success_response,
             _ => Response::error("Bad Gateway", 502),
         },
         Err(_) => Response::error("Internal Server Error", 500),
