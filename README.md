@@ -37,6 +37,6 @@ Read more about this on the
 
 ## Copyright
 
-Copyright &copy; 2019-2022 Mainmatter GmbH (https://mainmatter.com), released
-under the
+Copyright &copy; 2022 Mainmatter GmbH (https://mainmatter.com), released under
+the
 [Creative Commons Attribution-NonCommercial 4.0 International license](https://creativecommons.org/licenses/by-nc/4.0/).
