@@ -25,6 +25,15 @@ as well as to deploy a new version:
 $ pnpm run deploy
 ```
 
+## Development
+
+Development works like with any other Rust crate, just tests must be run via
+[`wasm-pack`](https://rustwasm.github.io/wasm-pack) as they run in a browser:
+
+```bash
+wasm-pack test --headless --chrome
+```
+
 ## WebAssembly
 
 `workers-rs` (the Rust SDK for Cloudflare Workers used in this template) is
