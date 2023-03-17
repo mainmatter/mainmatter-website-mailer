@@ -24,6 +24,7 @@ pub struct Payload {
     pub name: String,
     pub email: String,
     pub message: String,
+    pub service: String,
 }
 
 #[event(fetch, respond_with_errors)]
@@ -64,6 +65,8 @@ where
 {
     let message = payload.message.trim();
     let message = if !message.is_empty() { message } else { "–" };
+    let service = payload.service.trim();
+    let service = if !service.is_empty() { service } else { "–" };
 
     let data = json!({
         "personalizations": [{
@@ -76,7 +79,7 @@ where
         "subject": "Mainmatter inquiry",
         "content": [{
             "type": "text/plain",
-            "value": message
+            "value": format!("Service: {service}\n\n{message}")
         }]
     });
 
