@@ -118,6 +118,38 @@ async fn it_sends_an_empty_service_if_none_is_provided() {
 }
 
 #[wasm_bindgen_test]
+async fn it_sends_an_empty_service_if_other_is_provided() {
+    async fn request_sendgrid(_api_key: &str, data: String) -> Result<u16, NetworkError> {
+        let expected = json!({
+            "personalizations": [{
+                "to": [
+                    { "email": "contact@mainmatter.com", "name": "Mainmatter" }
+                ]}
+            ],
+            "from": { "email": "no-reply@mainmatter.com", "name": "name via mainmatter.com" },
+            "reply_to": { "email": "email@domain.tld", "name": "name" },
+            "subject": "Mainmatter inquiry",
+            "content": [{
+                "type": "text/plain",
+                "value": "Hi!"
+            }]
+        });
+
+        assert_eq!(data, expected.to_string());
+
+        Ok(200)
+    }
+
+    let payload = Payload {
+        name: String::from("name"),
+        email: String::from("email@domain.tld"),
+        message: String::from("Hi!"),
+        service: String::from("Other"),
+    };
+    let _result = send_message(payload, "api_key", &request_sendgrid).await;
+}
+
+#[wasm_bindgen_test]
 async fn it_responds_with_502_if_sendgrid_errors() {
     async fn request_sendgrid(_api_key: &str, _data: String) -> Result<u16, NetworkError> {
         Ok(500)

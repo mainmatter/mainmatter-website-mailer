@@ -66,7 +66,7 @@ where
     let message = payload.message.trim();
     let message = if !message.is_empty() { message } else { "–" };
     let service = payload.service.trim();
-    let subject = if !service.is_empty() {
+    let subject = if !service.is_empty() && service.to_lowercase() != "other" {
         format!("Mainmatter inquiry for {service}")
     } else {
         "Mainmatter inquiry".to_owned()
