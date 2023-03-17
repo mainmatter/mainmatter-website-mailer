@@ -24,7 +24,7 @@ pub struct Payload {
     pub name: String,
     pub email: String,
     pub message: String,
-    pub service: String,
+    pub service: Option<String>,
 }
 
 #[event(fetch, respond_with_errors)]
@@ -65,7 +65,11 @@ where
 {
     let message = payload.message.trim();
     let message = if !message.is_empty() { message } else { "–" };
-    let service = payload.service.trim();
+    let service = if let Some(service) = payload.service {
+        service
+    } else {
+        "".to_owned()
+    };
     let subject = if !service.is_empty() && service.to_lowercase() != "other" {
         format!("Mainmatter inquiry for {service}")
     } else {
