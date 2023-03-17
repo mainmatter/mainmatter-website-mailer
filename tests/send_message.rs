@@ -32,10 +32,10 @@ async fn it_sends_the_right_payload_to_sendgrid() {
             ],
             "from": { "email": "no-reply@mainmatter.com", "name": "name via mainmatter.com" },
             "reply_to": { "email": "email@domain.tld", "name": "name" },
-            "subject": "Mainmatter inquiry",
+            "subject": "Mainmatter inquiry for Digital Products & Design",
             "content": [{
                 "type": "text/plain",
-                "value": "Service: Digital Products & Design\n\nHi!"
+                "value": "Hi!"
             }]
         });
 
@@ -64,10 +64,10 @@ async fn it_sends_an_empty_message_if_none_is_provided() {
             ],
             "from": { "email": "no-reply@mainmatter.com", "name": "name via mainmatter.com" },
             "reply_to": { "email": "email@domain.tld", "name": "name" },
-            "subject": "Mainmatter inquiry",
+            "subject": "Mainmatter inquiry for Digital Products & Design",
             "content": [{
                 "type": "text/plain",
-                "value": "Service: Digital Products & Design\n\n–"
+                "value": "–"
             }]
         });
 
@@ -99,7 +99,7 @@ async fn it_sends_an_empty_service_if_none_is_provided() {
             "subject": "Mainmatter inquiry",
             "content": [{
                 "type": "text/plain",
-                "value": "Service: –\n\nHi!"
+                "value": "Hi!"
             }]
         });
 
