@@ -32,10 +32,10 @@ async fn it_sends_the_right_payload_to_sendgrid() {
             ],
             "from": { "email": "no-reply@mainmatter.com", "name": "name via mainmatter.com" },
             "reply_to": { "email": "email@domain.tld", "name": "name" },
-            "subject": "Mainmatter inquiry",
+            "subject": "Mainmatter inquiry for Digital Products & Design",
             "content": [{
                 "type": "text/plain",
-                "value": "Service: Digital Products & Design\n\nHi!"
+                "value": "Hi!"
             }]
         });
 
@@ -64,10 +64,10 @@ async fn it_sends_an_empty_message_if_none_is_provided() {
             ],
             "from": { "email": "no-reply@mainmatter.com", "name": "name via mainmatter.com" },
             "reply_to": { "email": "email@domain.tld", "name": "name" },
-            "subject": "Mainmatter inquiry",
+            "subject": "Mainmatter inquiry for Digital Products & Design",
             "content": [{
                 "type": "text/plain",
-                "value": "Service: Digital Products & Design\n\n–"
+                "value": "–"
             }]
         });
 
@@ -99,7 +99,7 @@ async fn it_sends_an_empty_service_if_none_is_provided() {
             "subject": "Mainmatter inquiry",
             "content": [{
                 "type": "text/plain",
-                "value": "Service: –\n\nHi!"
+                "value": "Hi!"
             }]
         });
 
@@ -113,6 +113,38 @@ async fn it_sends_an_empty_service_if_none_is_provided() {
         email: String::from("email@domain.tld"),
         message: String::from("Hi!"),
         service: String::from(""),
+    };
+    let _result = send_message(payload, "api_key", &request_sendgrid).await;
+}
+
+#[wasm_bindgen_test]
+async fn it_sends_an_empty_service_if_other_is_provided() {
+    async fn request_sendgrid(_api_key: &str, data: String) -> Result<u16, NetworkError> {
+        let expected = json!({
+            "personalizations": [{
+                "to": [
+                    { "email": "contact@mainmatter.com", "name": "Mainmatter" }
+                ]}
+            ],
+            "from": { "email": "no-reply@mainmatter.com", "name": "name via mainmatter.com" },
+            "reply_to": { "email": "email@domain.tld", "name": "name" },
+            "subject": "Mainmatter inquiry",
+            "content": [{
+                "type": "text/plain",
+                "value": "Hi!"
+            }]
+        });
+
+        assert_eq!(data, expected.to_string());
+
+        Ok(200)
+    }
+
+    let payload = Payload {
+        name: String::from("name"),
+        email: String::from("email@domain.tld"),
+        message: String::from("Hi!"),
+        service: String::from("Other"),
     };
     let _result = send_message(payload, "api_key", &request_sendgrid).await;
 }

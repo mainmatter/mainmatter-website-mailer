@@ -66,7 +66,11 @@ where
     let message = payload.message.trim();
     let message = if !message.is_empty() { message } else { "–" };
     let service = payload.service.trim();
-    let service = if !service.is_empty() { service } else { "–" };
+    let subject = if !service.is_empty() && service.to_lowercase() != "other" {
+        format!("Mainmatter inquiry for {service}")
+    } else {
+        "Mainmatter inquiry".to_owned()
+    };
 
     let data = json!({
         "personalizations": [{
@@ -76,10 +80,10 @@ where
         ],
         "from": { "email": "no-reply@mainmatter.com", "name": format!("{} via mainmatter.com", payload.name) },
         "reply_to": { "email": payload.email, "name": payload.name },
-        "subject": "Mainmatter inquiry",
+        "subject": subject,
         "content": [{
             "type": "text/plain",
-            "value": format!("Service: {service}\n\n{message}")
+            "value": message
         }]
     });
 
