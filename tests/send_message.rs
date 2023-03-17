@@ -16,7 +16,7 @@ async fn it_works_for_the_happy_path() {
         message: String::from("Hi!"),
         service: Some(String::from("Digital Products & Design")),
     };
-    let result = send_message(payload, "api_key", &request_sendgrid).await;
+    let result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 
     assert_eq!(result.unwrap().status_code(), 200);
 }
@@ -28,8 +28,11 @@ async fn it_sends_the_right_payload_to_sendgrid() {
             "personalizations": [{
                 "to": [
                     { "email": "contact@mainmatter.com", "name": "Mainmatter" }
-                ]}
-            ],
+                ],
+                "bcc": [
+                    { "email": "trigger@zapier.com" }
+                ]
+            }],
             "from": { "email": "no-reply@mainmatter.com", "name": "name via mainmatter.com" },
             "reply_to": { "email": "email@domain.tld", "name": "name" },
             "subject": "Mainmatter inquiry for Digital Products & Design",
@@ -50,7 +53,7 @@ async fn it_sends_the_right_payload_to_sendgrid() {
         message: String::from("Hi!"),
         service: Some(String::from("Digital Products & Design")),
     };
-    let _result = send_message(payload, "api_key", &request_sendgrid).await;
+    let _result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 }
 
 #[wasm_bindgen_test]
@@ -60,8 +63,11 @@ async fn it_sends_an_empty_message_if_none_is_provided() {
             "personalizations": [{
                 "to": [
                     { "email": "contact@mainmatter.com", "name": "Mainmatter" }
-                ]}
-            ],
+                ],
+                "bcc": [
+                    { "email": "trigger@zapier.com" }
+                ]
+            }],
             "from": { "email": "no-reply@mainmatter.com", "name": "name via mainmatter.com" },
             "reply_to": { "email": "email@domain.tld", "name": "name" },
             "subject": "Mainmatter inquiry for Digital Products & Design",
@@ -82,7 +88,7 @@ async fn it_sends_an_empty_message_if_none_is_provided() {
         message: String::from(""),
         service: Some(String::from("Digital Products & Design")),
     };
-    let _result = send_message(payload, "api_key", &request_sendgrid).await;
+    let _result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 }
 
 #[wasm_bindgen_test]
@@ -92,8 +98,11 @@ async fn it_leaves_out_the_service_if_an_empty_one_is_provided() {
             "personalizations": [{
                 "to": [
                     { "email": "contact@mainmatter.com", "name": "Mainmatter" }
-                ]}
-            ],
+                ],
+                "bcc": [
+                    { "email": "trigger@zapier.com" }
+                ]
+            }],
             "from": { "email": "no-reply@mainmatter.com", "name": "name via mainmatter.com" },
             "reply_to": { "email": "email@domain.tld", "name": "name" },
             "subject": "Mainmatter inquiry",
@@ -114,7 +123,7 @@ async fn it_leaves_out_the_service_if_an_empty_one_is_provided() {
         message: String::from("Hi!"),
         service: Some(String::from("")),
     };
-    let _result = send_message(payload, "api_key", &request_sendgrid).await;
+    let _result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 }
 
 #[wasm_bindgen_test]
@@ -124,8 +133,11 @@ async fn it_leaves_out_the_service_if_none_is_provided() {
             "personalizations": [{
                 "to": [
                     { "email": "contact@mainmatter.com", "name": "Mainmatter" }
-                ]}
-            ],
+                ],
+                "bcc": [
+                    { "email": "trigger@zapier.com" }
+                ]
+            }],
             "from": { "email": "no-reply@mainmatter.com", "name": "name via mainmatter.com" },
             "reply_to": { "email": "email@domain.tld", "name": "name" },
             "subject": "Mainmatter inquiry",
@@ -146,7 +158,7 @@ async fn it_leaves_out_the_service_if_none_is_provided() {
         message: String::from("Hi!"),
         service: None,
     };
-    let _result = send_message(payload, "api_key", &request_sendgrid).await;
+    let _result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 }
 
 #[wasm_bindgen_test]
@@ -156,8 +168,11 @@ async fn it_leaves_out_the_service_if_other_is_provided() {
             "personalizations": [{
                 "to": [
                     { "email": "contact@mainmatter.com", "name": "Mainmatter" }
-                ]}
-            ],
+                ],
+                "bcc": [
+                    { "email": "trigger@zapier.com" }
+                ]
+            }],
             "from": { "email": "no-reply@mainmatter.com", "name": "name via mainmatter.com" },
             "reply_to": { "email": "email@domain.tld", "name": "name" },
             "subject": "Mainmatter inquiry",
@@ -178,7 +193,7 @@ async fn it_leaves_out_the_service_if_other_is_provided() {
         message: String::from("Hi!"),
         service: Some(String::from("Other")),
     };
-    let _result = send_message(payload, "api_key", &request_sendgrid).await;
+    let _result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 }
 
 #[wasm_bindgen_test]
@@ -193,7 +208,7 @@ async fn it_responds_with_502_if_sendgrid_errors() {
         message: String::from("Hi!"),
         service: Some(String::from("")),
     };
-    let result = send_message(payload, "api_key", &request_sendgrid).await;
+    let result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 
     assert_eq!(result.unwrap().status_code(), 502);
 }
@@ -210,7 +225,7 @@ async fn it_responds_with_500_if_calling_sendgrid_errors() {
         message: String::from("Hi!"),
         service: Some(String::from("")),
     };
-    let result = send_message(payload, "api_key", &request_sendgrid).await;
+    let result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 
     assert_eq!(result.unwrap().status_code(), 500);
 }

@@ -43,9 +43,12 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> WorkerResult
         .options_async("/send", |_req, _ctx| async move { Response::ok("") })
         .post_async("/send", |mut req, ctx| async move {
             let api_key = ctx.secret("SENDGRID_API_KEY")?.to_string();
+            let zapier_email = ctx.secret("ZAPIER_EMAIL")?.to_string();
 
             match req.json::<Payload>().await {
-                Ok(payload) => send_message(payload, &api_key, &request_sendgrid).await,
+                Ok(payload) => {
+                    send_message(payload, &api_key, &zapier_email, &request_sendgrid).await
+                }
                 Err(_) => Response::error("Unprocessable Entity", 422),
             }
         })
@@ -58,6 +61,7 @@ pub async fn main(req: Request, env: Env, _ctx: worker::Context) -> WorkerResult
 pub async fn send_message<'a, Fut>(
     payload: Payload,
     api_key: &'a str,
+    zapier_email: &'a str,
     sendgrid: impl FnOnce(&'a str, String) -> Fut + 'a,
 ) -> WorkerResult<Response>
 where
@@ -80,8 +84,11 @@ where
         "personalizations": [{
             "to": [
                 { "email": "contact@mainmatter.com", "name": "Mainmatter" }
-            ]}
-        ],
+            ],
+            "bcc": [
+                { "email": zapier_email }
+            ]
+        }],
         "from": { "email": "no-reply@mainmatter.com", "name": format!("{} via mainmatter.com", payload.name) },
         "reply_to": { "email": payload.email, "name": payload.name },
         "subject": subject,
