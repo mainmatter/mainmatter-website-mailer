@@ -13,14 +13,14 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: volta-cli/action@v4
-      - uses: pnpm/action-setup@v2.2.4
+      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3
+      - uses: volta-cli/action@25888009cd70dbe17a140f1c56d93f8c09f7bcef # v4
+      - uses: pnpm/action-setup@c3b53f6a16e57305370b4ae5a540c2077a1d50dd # v2.2.4
         with:
           version: 7.13.6
 
       - name: rust-toolchain
-        uses: actions-rs/toolchain@v1.0.3
+        uses: actions-rs/toolchain@f0a61e67694777b069e203b84faf6fdab0666a44 # v1.0.3
         with:
           toolchain: stable
 

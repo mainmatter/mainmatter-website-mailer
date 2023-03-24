@@ -13,9 +13,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: volta-cli/action@v4
-      - uses: pnpm/action-setup@v2.2.4
+      - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3
+      - uses: volta-cli/action@25888009cd70dbe17a140f1c56d93f8c09f7bcef # v4
+      - uses: pnpm/action-setup@c3b53f6a16e57305370b4ae5a540c2077a1d50dd # v2.2.4
         with:
           version: 7.13.6
 
@@ -30,15 +30,15 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3
     
     - name: rust-toolchain
-      uses: actions-rs/toolchain@v1.0.3
+      uses: actions-rs/toolchain@f0a61e67694777b069e203b84faf6fdab0666a44 # v1.0.3
       with:
         toolchain: stable
     
     - name: cargo check
-      uses: actions-rs/cargo@v1.0.1
+      uses: actions-rs/cargo@ae10961054e4aa8b4aa7dffede299aaf087aa33b # v1.0.1
       with:
         command: check
 
@@ -47,16 +47,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3
 
     - name: rust-toolchain
-      uses: actions-rs/toolchain@v1.0.3
+      uses: actions-rs/toolchain@f0a61e67694777b069e203b84faf6fdab0666a44 # v1.0.3
       with:
         toolchain: stable
         components: rustfmt
 
     - name: fmt
-      uses: actions-rs/cargo@v1.0.1
+      uses: actions-rs/cargo@ae10961054e4aa8b4aa7dffede299aaf087aa33b # v1.0.1
       with:
         command: fmt
         args: --all -- --check
@@ -66,16 +66,16 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3
     
     - name: rust-toolchain
-      uses: actions-rs/toolchain@v1.0.3
+      uses: actions-rs/toolchain@f0a61e67694777b069e203b84faf6fdab0666a44 # v1.0.3
       with:
         toolchain: stable
         components: clippy
     
     - name: clippy
-      uses: actions-rs/cargo@v1.0.1
+      uses: actions-rs/cargo@ae10961054e4aa8b4aa7dffede299aaf087aa33b # v1.0.1
       with:
         command: clippy
 
@@ -84,10 +84,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@8f4b7f84864484a7bf31766abe9204da3cbe65b3 # v3
 
     - name: rust-toolchain
-      uses: actions-rs/toolchain@v1.0.3
+      uses: actions-rs/toolchain@f0a61e67694777b069e203b84faf6fdab0666a44 # v1.0.3
       with:
         toolchain: stable
         components: clippy
