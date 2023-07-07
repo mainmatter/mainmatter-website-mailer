@@ -2,12 +2,12 @@ lockfileVersion: 5.4
 
 specifiers:
   npm-run-all: ^4.1.5
-  prettier: ^2.7.1
+  prettier: ^3.0.0
   wrangler: ^2.0.0
 
 devDependencies:
   npm-run-all: 4.1.5
-  prettier: 2.7.1
+  prettier: 3.0.0
   wrangler: 2.1.13
 
 packages:
@@ -1143,9 +1143,9 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
-  /prettier/2.7.1:
-    resolution: {integrity: sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==}
-    engines: {node: '>=10.13.0'}
+  /prettier/3.0.0:
+    resolution: {integrity: sha512-zBf5eHpwHOGPC47h0zrPyNn+eAEIdEzfywMoYn2XPi0P44Zp0tSq64rq0xAREh4auw2cJZHo9QUob+NqCQky4g==}
+    engines: {node: '>=14'}
     hasBin: true
     dev: true
 
