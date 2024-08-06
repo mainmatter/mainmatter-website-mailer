@@ -25,6 +25,7 @@ pub struct Payload {
     pub email: String,
     pub message: String,
     pub service: Option<String>,
+    pub company: Option<String>,
 }
 
 #[event(fetch, respond_with_errors)]
@@ -74,10 +75,16 @@ where
     } else {
         "".to_owned()
     };
-    let subject = if !service.is_empty() && service.to_lowercase() != "other" {
+    let mut subject = if !service.is_empty() && service.to_lowercase() != "other" {
         format!("Mainmatter inquiry for {service}")
     } else {
         "Mainmatter inquiry".to_owned()
+    };
+
+    subject = if let Some(company) = payload.company {
+        format!("{} from {}", subject, company)
+    } else {
+        subject
     };
 
     let data = json!({
