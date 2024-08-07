@@ -25,7 +25,7 @@ pub struct Payload {
     pub email: String,
     pub message: String,
     pub service: Option<String>,
-    pub company: Option<String>,
+    pub company: String,
 }
 
 #[event(fetch, respond_with_errors)]
@@ -82,7 +82,8 @@ where
         "Mainmatter inquiry".to_owned()
     };
 
-    let name = if let Some(company) = payload.company {
+    let company = payload.company.trim();
+    let name = if !company.is_empty() {
         format!("{} ({}) via mainmatter.com", payload.name, company)
     } else {
         format!("{} via mainmatter.com", payload.name)
