@@ -214,9 +214,9 @@ async fn it_adds_company_to_the_subject_if_one_is_provided() {
                     { "email": "trigger@zapier.com" }
                 ]
             }],
-            "from": { "email": "no-reply@mainmatter.com", "name": "name via mainmatter.com" },
+            "from": { "email": "no-reply@mainmatter.com", "name": "name (Company) via mainmatter.com" },
             "reply_to": { "email": "email@domain.tld", "name": "name" },
-            "subject": "Mainmatter inquiry from Company",
+            "subject": "Mainmatter inquiry",
             "content": [{
                 "type": "text/plain",
                 "value": "Hi!"

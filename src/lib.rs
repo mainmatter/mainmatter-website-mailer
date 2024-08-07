@@ -75,16 +75,17 @@ where
     } else {
         "".to_owned()
     };
-    let mut subject = if !service.is_empty() && service.to_lowercase() != "other" {
+
+    let subject = if !service.is_empty() && service.to_lowercase() != "other" {
         format!("Mainmatter inquiry for {service}")
     } else {
         "Mainmatter inquiry".to_owned()
     };
 
-    subject = if let Some(company) = payload.company {
-        format!("{} from {}", subject, company)
+    let name = if let Some(company) = payload.company {
+        format!("{} ({}) via mainmatter.com", payload.name, company)
     } else {
-        subject
+        format!("{} via mainmatter.com", payload.name)
     };
 
     let data = json!({
@@ -96,7 +97,7 @@ where
                 { "email": zapier_email }
             ]
         }],
-        "from": { "email": "no-reply@mainmatter.com", "name": format!("{} via mainmatter.com", payload.name) },
+        "from": { "email": "no-reply@mainmatter.com", "name": name },
         "reply_to": { "email": payload.email, "name": payload.name },
         "subject": subject,
         "content": [{
