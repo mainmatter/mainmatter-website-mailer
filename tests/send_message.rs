@@ -15,7 +15,7 @@ async fn it_works_for_the_happy_path() {
         email: String::from("email@domain.tld"),
         message: String::from("Hi!"),
         service: Some(String::from("Digital Products & Design")),
-        company: None,
+        company: String::from(""),
     };
     let result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 
@@ -53,7 +53,7 @@ async fn it_sends_the_right_payload_to_sendgrid() {
         email: String::from("email@domain.tld"),
         message: String::from("Hi!"),
         service: Some(String::from("Digital Products & Design")),
-        company: None,
+        company: String::from(""),
     };
     let _result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 }
@@ -89,7 +89,7 @@ async fn it_sends_an_empty_message_if_none_is_provided() {
         email: String::from("email@domain.tld"),
         message: String::from(""),
         service: Some(String::from("Digital Products & Design")),
-        company: None,
+        company: String::from(""),
     };
     let _result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 }
@@ -125,7 +125,7 @@ async fn it_leaves_out_the_service_if_an_empty_one_is_provided() {
         email: String::from("email@domain.tld"),
         message: String::from("Hi!"),
         service: Some(String::from("")),
-        company: None,
+        company: String::from(""),
     };
     let _result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 }
@@ -161,7 +161,7 @@ async fn it_leaves_out_the_service_if_none_is_provided() {
         email: String::from("email@domain.tld"),
         message: String::from("Hi!"),
         service: None,
-        company: None,
+        company: String::from(""),
     };
     let _result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 }
@@ -197,7 +197,7 @@ async fn it_leaves_out_the_service_if_other_is_provided() {
         email: String::from("email@domain.tld"),
         message: String::from("Hi!"),
         service: Some(String::from("Other")),
-        company: None,
+        company: String::from(""),
     };
     let _result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 }
@@ -233,7 +233,7 @@ async fn it_adds_company_to_the_subject_if_one_is_provided() {
         email: String::from("email@domain.tld"),
         message: String::from("Hi!"),
         service: Some(String::from("Other")),
-        company: Some(String::from("Company")),
+        company: String::from("Company"),
     };
     let _result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 }
@@ -249,7 +249,7 @@ async fn it_responds_with_502_if_sendgrid_errors() {
         email: String::from("email@domain.tld"),
         message: String::from("Hi!"),
         service: Some(String::from("")),
-        company: None,
+        company: String::from(""),
     };
     let result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 
@@ -267,7 +267,7 @@ async fn it_responds_with_500_if_calling_sendgrid_errors() {
         email: String::from("email@domain.tld"),
         message: String::from("Hi!"),
         service: Some(String::from("")),
-        company: None,
+        company: String::from(""),
     };
     let result = send_message(payload, "api_key", "trigger@zapier.com", &request_sendgrid).await;
 
