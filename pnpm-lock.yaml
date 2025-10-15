@@ -12,8 +12,8 @@ importers:
         specifier: ^4.1.5
         version: 4.1.5
       prettier:
-        specifier: ^2.7.1
-        version: 2.7.1
+        specifier: ^3.0.0
+        version: 3.6.2
       wrangler:
         specifier: ^2.0.0
         version: 2.21.3(cron-schedule@3.0.6)
@@ -671,9 +671,9 @@ packages:
     resolution: {integrity: sha512-C3FsVNH1udSEX48gGX1xfvwTWfsYWj5U+8/uK15BGzIGrKoUpghX8hWZwa/OFnakBiiVNmBvemTJR5mcy7iPcg==}
     engines: {node: '>=4'}
 
-  prettier@2.7.1:
-    resolution: {integrity: sha512-ujppO+MkdPqoVINuDFDRLClm7D78qbDt0/NR+wp5FqEZOoTNAjPHWj17QRhu7geIHJfcNhRk1XVQmF8Bp3ye+g==}
-    engines: {node: '>=10.13.0'}
+  prettier@3.6.2:
+    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
+    engines: {node: '>=14'}
     hasBin: true
 
   read-pkg@3.0.0:
@@ -1529,7 +1529,7 @@ snapshots:
 
   pify@3.0.0: {}
 
-  prettier@2.7.1: {}
+  prettier@3.6.2: {}
 
   read-pkg@3.0.0:
     dependencies:
