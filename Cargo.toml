@@ -11,7 +11,7 @@ default = ["console_error_panic_hook"]
 
 [dependencies]
 cfg-if = "0.1.10"
-worker = "0.0.11"
+worker = "0.6"
 serde = "1.0"
 serde_json = "1.0"
 reqwest = { version = "0.12", features = ["json", "blocking"] }
@@ -23,7 +23,7 @@ reqwest = { version = "0.12", features = ["json", "blocking"] }
 console_error_panic_hook = { version = "0.1.7", optional = true }
 
 [dev-dependencies]
-wasm-bindgen-test = "0.3.0"
+wasm-bindgen-test = "0.3"
 
 [profile.release]
 # Tell `rustc` to optimize for small code size.
